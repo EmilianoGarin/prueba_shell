@@ -2,10 +2,8 @@
 
 void sig_handler(int signo)
 {
-    printf("received EXIT\n";
+	printf("received EXIT\n");
 }
-
-
 int  main(void)
 {
 	char c[1024];
@@ -33,7 +31,7 @@ int  main(void)
 			token = strtok(NULL, " \n");
 		}
 		av[i] = NULL;
-		pid_t pid = fork()
+		pid_t pid = fork();
 		if (pid == -1)
 		{
 			perror("fork failed");
@@ -49,7 +47,7 @@ int  main(void)
 		else
 		{
 			wait(NULL);
-			1 = 0;
+			i = 0;
 		}
 	}
 	printf("\n");
