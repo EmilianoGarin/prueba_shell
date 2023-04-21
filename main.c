@@ -1,11 +1,12 @@
 #include "main.h"
-
+#include <stdlib.h>
 void sig_handler(int signo)
 {
 	printf("received EXIT\n");
 }
 int  main(void)
 {
+	extern char **environ;
 	char c[1024];
 	char *buff = NULL;
 	char *token;
@@ -40,7 +41,7 @@ int  main(void)
 		else if (pid == 0)
 		{
 			sprintf(c, "%s/%s", "/usr/bin", av[0]);
-			execve(c, av, NULL);
+			execve(c, av, environ);
 			perror("execve failed");
 			exit(EXIT_FAILURE);
 		}
