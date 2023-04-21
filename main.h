@@ -5,3 +5,4 @@
 #include <unistd.h>
 #include<signal.h>
 #include <sys/wait.h>
+#define SIZE 1024
