@@ -2,10 +2,8 @@
 
 void sig_handler(int signo)
 {
-    printf("received EXIT\n");
+	printf("received EXIT\n");
 }
-
-
 int  main(void)
 {
 	char c[1024];
@@ -33,13 +31,24 @@ int  main(void)
 			token = strtok(NULL, " \n");
 		}
 		av[i] = NULL;
-
-		sprintf(c, "%s/%s", "/usr/bin", av[0]);
-		printf("Before execve\n");
-		if (execve(c, av, NULL) == -1)
-			break;
-
-		printf("After execve\n");
+		pid_t pid = fork();
+		if (pid == -1)
+		{
+			perror("fork failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			sprintf(c, "%s/%s", "/usr/bin", av[0]);
+			execve(c, av, NULL);
+			perror("execve failed");
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			wait(NULL);
+			i = 0;
+		}
 	}
 	printf("\n");
 	free(buff);
