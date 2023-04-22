@@ -7,27 +7,30 @@ void sig_handler(int signo)
 
 int main(void)
 {
-	char *buff;
+	char *buff, name[1024];
 	char **av;
 	int status = 0;
 
 	signal(SIGINT, sig_handler);
 	do {
 		printf("$ ");
+		
 		buff = buffer();
-		printf("%p\n", buff );
-		av = split_buff(buff);
-		printf("%p\n", buff );
-		printf("%p\n",av );
-		printf("%p\n", *av );
-		status = for_exe(av);
-		printf("%p\n", buff );
-		printf("%p\n",av  );
-		printf("%p\n", *av );
 
+		av = split_buff(buff);
+		
+		sprintf(name, "%s/%s", "/usr/bin", av[0]);
+		av[0] = name;
+		
 		free(buff);
+
+		status = for_exe(av);
+
 		free(av);
 	} while (status);
+
+
+		
 	printf("\n");
 
 }

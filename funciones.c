@@ -32,23 +32,19 @@ char **split_buff(char *buff)
 	if (av == NULL)
 		exit(EXIT_FAILURE);
 
-	printf("%d ", size + 1);
 	token = strtok(buff, " \n");
 	for (; posi < size; posi++)
 	{
-		printf("%d ", posi);
 		av[posi] = token;
 		token = strtok(NULL, " \n");
 	}
-	printf("\n%d ", posi);
 	av[posi] = NULL;
 	return (av);
 }
 
 int for_exe(char **av)
 {
-	char c[1024];
-	pid_t wpid, pid = fork();
+	pid_t pid = fork();
 	int status;
 
 	if (pid == -1)
@@ -59,16 +55,14 @@ int for_exe(char **av)
 
 	else if (pid == 0)
 	{
-		sprintf(c, "%s/%s", "/usr/bin", av[0]);
-		execve(c, av, NULL);
+		execve(av[0], av, NULL);
 		perror("execve failed");
+		free(av);
 		exit(EXIT_FAILURE);
 	}
 	else
 	{
-		do {
-			wpid = waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		wait(NULL);
 	}
 	return (1);
 }
