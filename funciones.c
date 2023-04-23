@@ -9,7 +9,11 @@ char *buffer(void)
 
 	fflush(stdin);
 	if (getline(&buff, &len, stdin) == -1)
+	{
+		free(buff);
+		printf("\n");
 		exit(EXIT_FAILURE);
+	}
 	return (buff);
 }
 
