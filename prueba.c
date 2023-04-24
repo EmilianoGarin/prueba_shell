@@ -21,7 +21,10 @@ int main(void)
 		
 		sprintf(name, "%s/%s", "/usr/bin", av[0]);
 		av[0] = name;
-		
+		if (access(name, F_OK) != 0)
+		{
+			printf("%s: command not found\n", name);
+		}		
 		free(buff);
 
 		status = for_exe(av);
