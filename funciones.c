@@ -34,7 +34,7 @@ char **split_buff(char *buff)
 
 	av = malloc(sizeof(char *) * (size + 1));
 	if (av == NULL)
-
+		exit(EXIT_FAILURE);
 
 	token = strtok(buff, " \n");
 	for (; posi < size; posi++)
@@ -48,7 +48,6 @@ char **split_buff(char *buff)
 
 int for_exe(char **av)
 {
-	extern char **environ;
 	pid_t pid = fork();
 	int status;
 
@@ -60,7 +59,7 @@ int for_exe(char **av)
 
 	else if (pid == 0)
 	{
-		execve(av[0], av, environ);
+		execve(av[0], av, NULL);
 		perror("execve failed");
 		free(av);
 		exit(EXIT_FAILURE);

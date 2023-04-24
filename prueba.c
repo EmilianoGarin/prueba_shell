@@ -14,17 +14,14 @@ int main(void)
 	signal(SIGINT, sig_handler);
 	do {
 		printf("$ ");
-		
+
 		buff = buffer();
 
 		av = split_buff(buff);
-		
+
 		sprintf(name, "%s/%s", "/usr/bin", av[0]);
 		av[0] = name;
-		if (access(name, F_OK) != 0)
-		{
-			printf("%s: command not found\n", name);
-		}		
+
 		free(buff);
 
 		status = for_exe(av);
@@ -33,7 +30,7 @@ int main(void)
 	} while (status);
 
 
-		
+
 	printf("\n");
 
 }
