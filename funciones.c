@@ -18,13 +18,16 @@ char *buffer(void)
 }
 
 
-char **split_buff(char *buff)
+char **split_buff(char *buffer)
 {
 	int len, size = 0, posi = 0;
 	char **av = NULL;
 	char *token;
+	char *buff;
 
-	
+	buff = strdup(buffer);
+	if (buff == NULL)
+		return (NULL);
 	token = strtok(buff, " \n");
 	while (token != NULL)
 	{
@@ -56,7 +59,6 @@ int for_exe(char **av)
 		perror("fork failed");
 		exit(EXIT_FAILURE);
 	}
-
 	else if (pid == 0)
 	{
 		execve(av[0], av, NULL);
@@ -70,3 +72,4 @@ int for_exe(char **av)
 	}
 	return (1);
 }
+
