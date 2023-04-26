@@ -14,3 +14,4 @@ char *buffer(void);
 char **split_buff(char *buff);
 int for_exe(char **av);
 int splitpath(char **av);
+void free_ar(char ** av, int i);

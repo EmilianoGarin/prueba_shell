@@ -1,12 +1,12 @@
 #include "main.h"
-void sig_handler(int signo)
+void sig_handler()
 {
-	        printf("received EXIT\n");
+	printf("received EXIT\n");
 }
 
 int main(void)
 {
-	char *buff, name[1024];
+	char *buff;
 	char **av;
 	int status = 0;
 
@@ -18,14 +18,13 @@ int main(void)
 
 		av = split_buff(buff);
 					
-		free(buff);
 		status = splitpath(av);
 
+//		free_ar(av, (sizeof(av) / sizeof(char *)) - 1);
 		free(av);
+		free(buff);
 	} while (status);
 
-
-
 	printf("\n");
-
+	return (0);
 }
