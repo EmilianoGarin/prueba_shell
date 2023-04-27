@@ -38,13 +38,20 @@ char **split_buff(char *buff, char *spliter)
 
 	if (cpbuff == NULL)
 		exit(0);
+		printf("  %p\n", buff);
 	token = strtok(buff, spliter);
 	while (token != NULL)
 	{
 		size++;
 		token = strtok(NULL, spliter);
 	}
-
+		printf("  %p\n", buff);
+	if (size == 0)
+	{
+		free(buff);
+		free(cpbuff);
+		return (NULL);
+	}
 	av = malloc(sizeof(char *) * (size + 1));
 	if (av == NULL)
 		exit(EXIT_FAILURE);

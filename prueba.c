@@ -11,6 +11,9 @@ int main(void)
 	int ac = 0, status = 1;
 
 	signal(SIGINT, sig_handler);
+	
+	split_p = splitpath();
+	
 	do {
 		printf("$ ");
 
@@ -18,16 +21,14 @@ int main(void)
 		printf("%p  %s\n", buff, buff);
 		if (buff == NULL)
 		{
-			if(split_p != NULL)
-				free_ar(split_p);
+			free_ar(split_p);
 			exit(0);
 		}
-
-	
+		else
+		{		
 			av = split_buff(buff, " \n");
-			free(buff);
-			if (split_p == NULL)
-				split_p = splitpath();
+			if (av == NULL)
+				continue;
 			if (av[0][0] == '/')
 			{
 				ac = access(av[0], X_OK);
@@ -40,7 +41,8 @@ int main(void)
 			}
 
 			free_ar(av);
-
+		}
+		free(buff);
 	} while (status);
 	printf("\n");
 	return (0);
