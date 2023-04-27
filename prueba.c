@@ -29,6 +29,7 @@ int main(void)
 			av = split_buff(buff, " \n");
 			if (av == NULL)
 				continue;
+			free(buff);
 			if (av[0][0] == '/')
 			{
 				ac = access(av[0], X_OK);
@@ -42,7 +43,6 @@ int main(void)
 
 			free_ar(av);
 		}
-		free(buff);
 	} while (status);
 	printf("\n");
 	return (0);

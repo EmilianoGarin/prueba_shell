@@ -18,6 +18,7 @@ int find_exe(char **av, char**pwd)
 	if (strcmp(av[0], "exit") == 0)
 	{
 		free_ar(pwd);
+		free_ar(av);
 		exit(0);
 	}
 	while ( pwd[i] != NULL)
