@@ -23,7 +23,7 @@ int find_exe(char **av, char**pwd)
 	}
 	while ( pwd[i] != NULL)
 	{
-		token = malloc(sizeof(pwd[i]) + sizeof(av[0]) + 1);
+		token = malloc(strlen(pwd[i]) + strlen(av[0]) + 1);
 		if (token == NULL)
 		{
 			free(pwd);
