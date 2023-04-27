@@ -2,12 +2,16 @@
 #define BUFSIZE 64
 #define LSH_TOK_DELIM " \t\r\n\a"
 
-void free_ar(char ** av, int i)
+void free_ar(char ** av)
 {
 	int x;
 
-	for (x = 0; x < i; x++)
+	for (x = 0; av[x] != NULL; x++)
+	{
+		printf("pr f    %s  %p\n", av[x] , av[x]);
 		free(av[x]);
+	}
+	free(av);
 }
 
 char *buffer(void)
@@ -20,55 +24,55 @@ char *buffer(void)
 	{
 		free(buff);
 		printf("\n");
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 	return (buff);
 }
 
-
-char **split_buff(char *buff)
+char **split_buff(char *buff, char *spliter)
 {
-	int  size = 0, posi = 0;
+	int size = 0, posi = 0;
 	char **av = NULL;
-	char *token;
+	char *token, *cpbuff = strdup(buff);
 
-	token = strtok(buff, " \n");
+
+	if (cpbuff == NULL)
+		exit(0);
+	token = strtok(buff, spliter);
 	while (token != NULL)
 	{
 		size++;
-		token = strtok(NULL, " \n");
+		token = strtok(NULL, spliter);
 	}
 
 	av = malloc(sizeof(char *) * (size + 1));
 	if (av == NULL)
 		exit(EXIT_FAILURE);
+	printf("   %d\n", size);
 
-	av[0] = strtok(buff, " \n");
-	if (av[0] == NULL)
-	{
-		free(av);
-		return (NULL);
-	}
+	token = strtok(cpbuff, spliter);
 	for (; posi < size; posi++)
 	{
-		av[posi] = strtok(NULL, " \n");
-
+		printf("  %p\n", token);
+		av[posi] = strdup(token);
+		printf("    %s  %p\n", av[posi] , av[posi]);
 		if (av[posi] == NULL)
 		{
-	//		free_ar(av, posi);
-			free(av);
-			return (NULL);
+			free_ar(av);
+			free(buff);
+			exit(0);
 		}
+		token = strtok(NULL, spliter);
 	}
 	av[posi] = NULL;
-		
+	free(cpbuff);
 	return (av);
 }
 
-int for_exe(char **av)
+int for_exe(char **av, char *dir)
 {
 	pid_t pid = fork();
-
+	
 
 	if (pid == -1)
 	{
@@ -77,10 +81,12 @@ int for_exe(char **av)
 	}
 	else if (pid == 0)
 	{
-		execve(av[0], av, NULL);
+		printf("%s, %s", dir, av[0]);
+		execve(dir, av, NULL);
 		perror("execve failed");
-		free(av);
+		free_ar(av);
 		exit(EXIT_FAILURE);
+
 	}
 	else
 	{

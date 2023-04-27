@@ -11,9 +11,8 @@
 extern char **environ;
 
 char *buffer(void);
-char **split_buff(char *buff);
-int for_exe(char **av);
-int splitpath(char **av);
-void free_ar(char ** av, int i);
-char *_getenv(char *name);
-int main(void);
+char **split_buff(char *buff, char *spliter);
+int for_exe(char **av, char *dir);
+char **splitpath();
+int find_exe(char **av, char**pwd);
+void free_ar(char ** av);

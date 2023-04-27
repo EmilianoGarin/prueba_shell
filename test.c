@@ -1,40 +1,44 @@
 #include "main.h"
-int splitpath(char **av)
+char **splitpath(void)
 {
 	char *ubi = getenv("PATH");
-	char *token, *buff = av[0];
 	char **pwd;
-	int i = 0;
-	int ac;
 
 	if (ubi == NULL)
 		exit(EXIT_FAILURE);
-	for (i = 0; ubi[i] != '\0'; i++)
-		if (ubi[i] == ':')
-			ubi[i] = ' ';
-	pwd = split_buff(ubi);
-	for (i = 0; pwd[i] != NULL; i++)
+	pwd = split_buff(ubi, ":");
+	return (pwd);
+}
+
+int find_exe(char **av, char**pwd)
+{
+	int ac, i = 0;
+	char *token = NULL;
+
+	if (strcmp(av[0], "exit") == 0)
+	{
+		free_ar(pwd);
+		exit(0);
+	}
+	while ( pwd[i] != NULL)
 	{
 		token = malloc(sizeof(pwd[i]) + sizeof(av[0]) + 1);
 		if (token == NULL)
 		{
-			free(ubi);
 			free(pwd);
 			return (1);
 		}
 		sprintf(token, "%s/%s", pwd[i], av[0]);
+		printf("%s || %ld || %ld || %ld\n", token, strlen(token), strlen(pwd[i]), strlen(av[0]));
 		ac = access(token, X_OK);
 		if (ac == 0)
 		{
-			free(buff);
-			av[0] = token;
-			for_exe(av);
+			for_exe(av, token);
+			free(token);
 			return (1);
 		}
 		free(token);
+		i++;
 	}
-	perror("Invalid direction");
-	free(pwd);
-	free(token);
-	return (1);
+
 }
