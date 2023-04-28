@@ -2,13 +2,12 @@
 #define BUFSIZE 64
 #define LSH_TOK_DELIM " \t\r\n\a"
 
-void free_ar(char ** av)
+void free_ar(char **av)
 {
-	int x;
+	int x = 0;
 
-	for (x = 0; av[x] != NULL; x++)
+	for (; av[x] != NULL; x++)
 	{
-		printf("pr f    %s  %p\n", av[x] , av[x]);
 		free(av[x]);
 	}
 	free(av);
@@ -33,19 +32,16 @@ char **split_buff(char *buff, char *spliter)
 {
 	int size = 0, posi = 0;
 	char **av = NULL;
-	char *token, *cpbuff = strdup(buff);
-
+	char *token = NULL, *cpbuff = strdup(buff);
 
 	if (cpbuff == NULL)
 		exit(0);
-		printf("  %p\n", buff);
 	token = strtok(buff, spliter);
 	while (token != NULL)
 	{
 		size++;
 		token = strtok(NULL, spliter);
 	}
-		printf("  %p\n", buff);
 	if (size == 0)
 	{
 		free(buff);
@@ -55,14 +51,11 @@ char **split_buff(char *buff, char *spliter)
 	av = malloc(sizeof(char *) * (size + 1));
 	if (av == NULL)
 		exit(EXIT_FAILURE);
-	printf("   %d\n", size);
 
 	token = strtok(cpbuff, spliter);
 	for (; posi < size; posi++)
 	{
-		printf("  %p\n", token);
 		av[posi] = strdup(token);
-		printf("    %s  %p\n", av[posi] , av[posi]);
 		if (av[posi] == NULL)
 		{
 			free_ar(av);

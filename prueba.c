@@ -6,7 +6,7 @@ void sig_handler()
 
 int main(void)
 {
-	char *buff;
+	char *buff = NULL;
 	char **av = NULL, **split_p = NULL;
 	int ac = 0, status = 1;
 
@@ -15,14 +15,13 @@ int main(void)
 	split_p = splitpath();
 	
 	do {
-		printf("$ ");
+		isatty(0) == 1 ? printf("$ ") : 0;
 
 		buff = buffer();
-		printf("%p  %s\n", buff, buff);
 		if (buff == NULL)
 		{
 			free_ar(split_p);
-			exit(0);
+			exit(1);
 		}
 		else
 		{		

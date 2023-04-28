@@ -1,51 +1,76 @@
 #include "main.h"
 char **splitpath(void)
 {
-	char *token, *ubi = getenv("PATH");
-	char **pwd;
-	int x = 0, j = 0, i = 0, size = 0;
+	char *path = _getenv("PATH");
+	char **cortado = NULL;
+        int a = 0, i, c = 0, d = 0, l, t = 0, j = 0, len = 0;
+        len = strlen(path);
+        printf("largo de la string:%d\n", len);
+        for (i = 0; path[i]!= '\0'; i++)
+        {
+                if (path[i] == ':')
+                {
+                        a++;
+                }
+        }
+        a = a + 2;
+        printf("largo de la string:%d\n", a);
+        cortado = (char **)malloc(a * sizeof(char *));
 
-	if (ubi == NULL)
-		exit(EXIT_FAILURE);
-	for (i = 0; ubi[i] != '\0'; i++)
-		if (ubi[i] == ':')
-			size++;
-
-	pwd = malloc(sizeof(char*) * (size + 1));
-	if (pwd == NULL)
-		exit(0);
-
-	printf("%d \n", size);
-	pwd[0] = strdup(strtok(ubi, ":"));
-	
-	printf("%s   %p \n", pwd[0], pwd[0]);
-	for (i = 1; i < size; i++)
-	{
-		pwd[i] = strdup(strtok(NULL, ":"));
-		
-		printf("%s   %p \n", pwd[i], pwd[i]);
-	}
-	pwd[++i] = NULL;
-	printf("%d \n", i);
-	
-	/*	for (i = 0; ubi[i] != '\0'; i++)
-	{
-		j++;
-		if (ubi[i] == ':')
-		{
-			ubi[i] = '\0';
-			pwd[x][j] = ubi[i];
-			j = 0;
-			x++;
-		}
-		else
-			pwd[x][j] = ubi[i];
-	}
-	pwd[x][j + 1] = '\0';
-	pwd[x + 1] = NULL;
-*/
-	return (pwd);
+        if (cortado == NULL)
+        {
+                return NULL;
+        }
+        cortado[a] = NULL;
+        for (i = 0; i <= len; i++)
+        {
+                c++;
+                if (path[i] == ':' || path[i] == '\0')
+                {
+                        cortado[d] = (char *)malloc((c) * sizeof(char));
+                        printf("largo de la palabra:%d\n", c);
+                        c = 0;
+                        if (cortado[d] == NULL)
+                        {
+                                free_ar(cortado);
+                                exit(0);
+                        }
+                        d++;
+                }
+        }
+        j = 0;
+        t = 0;
+        for (l = 0; l < len; l++)
+        {
+                cortado[t][j] = path[l];
+                j++;
+                if (path[l] == ':')
+                {
+                        j = 0;
+                        t++;
+                }
+        }
+        j = 0;
+        t = 0;
+        for (l = 0; l <= len; l++)
+        {
+                j++;
+                if (path[l] == ':' || path[l] == '\0')
+                {
+                        printf("punto de la string; %d\n", t);
+                        cortado[t][j - 1] = '\0';
+                        t++;
+                        printf("punto de la array; %d\n", j);
+                        j = 0;
+                }
+        }
+        for (i = 0; cortado[i] != NULL; i++)
+                 printf("Rutia %s\n", cortado[i]);
+        return (cortado);
 }
+
+	
+
 
 int find_exe(char **av, char**pwd)
 {
@@ -60,14 +85,13 @@ int find_exe(char **av, char**pwd)
 	}
 	while ( pwd[i] != NULL)
 	{
-		token = malloc(strlen(pwd[i]) + strlen(av[0]) + 1);
+		token = malloc(strlen(pwd[i]) + strlen(av[0]) + 2);
 		if (token == NULL)
 		{
 			free(pwd);
 			return (1);
 		}
 		sprintf(token, "%s/%s", pwd[i], av[0]);
-		printf("%s || %ld || %ld || %ld\n", token, strlen(token), strlen(pwd[i]), strlen(av[0]));
 		ac = access(token, X_OK);
 		if (ac == 0)
 		{
@@ -77,6 +101,7 @@ int find_exe(char **av, char**pwd)
 		}
 		free(token);
 		i++;
+		token = NULL;
 	}
 
 }
